@@ -1,0 +1,44 @@
+version: '3'
+services:
+    nginx:
+      image: nginx:1.14.2-alpine
+      ports:
+        - ${BIND_ADDR:-127.0.0.1}:8321:80
+      volumes:
+        - ./webconf/nginx_docker.conf:/etc/nginx/conf.d/nginx_docker.conf:ro
+        - ./app:/project/app:ro
+        - ./volumes/app/data:/project/data:ro
+        - ./volumes/log:/mnt/log:rw
+    php:
+      image: php:8.4.10-fpm-alpine3.21
+      environment:
+        LD_LIBRARY_PATH: /opt/lib
+        EMAIL_SSL_HOST: ${EMAIL_SSL_HOST}
+        EMAIL_FROM: ${EMAIL_FROM}
+        EMAIL_LOGIN: ${EMAIL_LOGIN}
+        EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      working_dir: /project/app
+      volumes:
+        - ./bin:/project/bin:ro
+        - ./app:/project/app:ro
+        - ./webconf/php/zz-php.conf:/usr/local/etc/php-fpm.d/zz-php.conf:ro
+        - ./webconf/php/mysqli.ini:/usr/local/etc/php/conf.d/mysqli.ini:ro
+        - ./webconf/php/gd.ini:/usr/local/etc/php/conf.d/gd.ini:ro
+        - ./volumes/usr/local/lib/php/extensions:/usr/local/lib/php/extensions:ro
+        - ./volumes/usr/lib:/opt/lib:ro
+        # rw vols
+        - ./volumes/app/data:/project/data:rw
+        - ./volumes/log:/mnt/log:rw
+    mysql:
+      image: mariadb:10.11.9
+      ports:
+        - ${BIND_ADDR:-127.0.0.1}:13306:3306
+      volumes:
+        - ./volumes/mysql:/var/lib/mysql
+      command: --innodb-snapshot-isolation=1
+      environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+

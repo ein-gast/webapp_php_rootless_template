@@ -1,0 +1,8 @@
+/.env
+/.sync-exclude
+
+# dumps & docker data
+/*.gz
+/*.tgz
+
+/backups
