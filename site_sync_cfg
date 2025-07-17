@@ -1,12 +1,9 @@
-# site params
-SITE_HTTP_HOST=example.com
-
 # files and folder to deploy
 # folder must has tailing slash (SITE_FILES="webconf/")
 SITE_FILES="app/public/ webconf/ bin/ runtime/ .env.example docker-compose.yml Makefile"
 DATA_FOLDERS="volumes/"
 # relative to volumes/
-DATA_EXCLUDE="mysql/* app/data/*"
+DATA_EXCLUDE="mysql/* log/nginx/* log/php/* app/data/*"
 
 # server and path to deploy to
-RSYNC_SITE_PATH="user@exaple.com:/home/user/app"
+RSYNC_SITE_PATH="user@exaple.com:/home/user/app/example.com"

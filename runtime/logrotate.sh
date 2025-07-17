@@ -24,7 +24,6 @@ rotate_one() {
         PFILE="$(printf %s.%02d.gz "$FILE" "$P")"
         CFILE="$(printf %s.%02d.gz "$FILE" "$N")"
         if test -f "$PFILE"; then
-            echo "$CFILE"
             mv -f "$PFILE" "$CFILE"
         fi
         N="$P"

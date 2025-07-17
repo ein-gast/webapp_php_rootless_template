@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"/..
 
-. ./site_sync_cfg || exit 1
+. ./.env || exit 1
 
 NKEEP=5
 
